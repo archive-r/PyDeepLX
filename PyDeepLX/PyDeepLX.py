@@ -63,7 +63,7 @@ def getTimestamp(iCount: int) -> int:
     return ts - ts % iCount + iCount
 
 
-def translate(
+async def translate(
     text,
     sourceLang=None,
     targetLang=None,
@@ -107,8 +107,8 @@ def translate(
         postDataStr = postDataStr.replace('"method":"', '"method": "', -1)
 
     # Add proxy (e.g. proxies='socks5://127.0.0.1:7890')
-    with httpx.Client(proxies=proxies) as client:
-        resp = client.post(url=deeplAPI, data=postDataStr, headers=headers)
+    async with httpx.AsyncClient(proxies=proxies) as client:
+        resp = await client.post(url=deeplAPI, data=postDataStr, headers=headers)
         respStatusCode = resp.status_code
 
         if respStatusCode == 429:
